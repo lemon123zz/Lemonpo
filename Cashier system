@@ -1,0 +1,129 @@
+from datetime import datetime
+
+# Initialize variables
+items = []
+total_price = 0
+
+# Login Section
+username1 = "cashier1"
+password1 = "securepass1"
+
+print("Welcome to the Cashier System!")
+input_username = input("Enter username: ")
+input_password = input("Enter password: ")
+
+# Check login credentials
+if input_username != username1 or input_password != password1:
+    print("Invalid username or password. Access denied.")
+else:
+    print("Login successful.\n")
+    
+    # Main Transaction Loop
+    while True:
+        print("1. Customer Approaches Cash Register")
+
+        # Step 2: Scan items
+        item_name = input("Enter item name (or type 'done' to finish): ")
+
+        while item_name.lower() != 'done':
+            item_price_input = input(f"Enter price for {item_name}: ₱")
+            
+            item_price = float(item_price_input)
+            if item_price > 0:
+                items.append({"name": item_name, "price": item_price})
+                total_price += item_price
+            else:     
+                print("Please enter a valid price.")
+            
+            item_name = input("Enter item name (or type 'done' to finish): ")
+
+        # Step 3: Display Total Price
+        print("\n3. Display Total Price")
+        print("Items Purchased:")
+        for item in items:
+            print(f"- {item['name']}: ₱{item['price']:.2f}")
+        print(f"Total: ₱{total_price:.2f}")
+     
+        # Step 4: Ask for Payment Method
+        while True:
+            payment_method = input("\n4. Payment Method (Cash/Card): ").lower()
+            
+            if payment_method == "cash":
+                cash_received = float(input("Enter cash received: ₱"))
+                if cash_received < total_price:
+                    print("Insufficient cash. Transaction failed.")
+                else:
+                    change = cash_received - total_price
+                    print(f"Change to provide: ₱{change:.2f}")
+                    print("Transaction successful.")
+                    
+                    # Print receipt
+                    print("\n" + "="*30)
+                    print("       Python Store Receipt       ")
+                    print("="*30)
+                    print("Date:", datetime.now().strftime("%Y-%m-%d %H:%M:%S"))
+                    print("-" * 30)
+                    print("Items Purchased:")
+                    for item in items:
+                        print(f"{item['name']:<20} ₱{item['price']:.2f}")
+                    print("-" * 30)
+                    print(f"Total:                   ₱{total_price:.2f}")
+                    print(f"Number of Items:         {len(items)}")
+                    print(f"Payment Method:          {payment_method.capitalize()}")
+                    print(f"Cash Received:           ₱{cash_received:.2f}")
+                    print(f"Change:                  ₱{change:.2f}")
+                    print("="*30)
+                    print("      Thank you for shopping!     ")
+                    print("="*30)
+                    break
+
+            elif payment_method == "card":
+                print("Processing card payment...")
+                card = input("What type of card: ")
+                card_pin = "1234"  # Static card PIN for simplicity
+                entered_pin = input("Enter PIN for card: ")
+                
+                if entered_pin == card_pin:
+                    cash_received = float(input("Enter cash received: ₱ "))
+                    if cash_received < total_price:
+                      print("Insufficient funds. Transaction failed.")
+                    else: 
+                      change = cash_received - total_price
+                    payment_successful = input("Is payment successful? (yes/no): ").lower()
+                    
+                    if payment_successful == "yes":
+                        print("Transaction successful.")
+                        
+                        # Print receipt
+                        print("\n" + "="*30)
+                        print("       Python Store Receipt       ")
+                        print("="*30)
+                        print("Date:", datetime.now().strftime("%Y-%m-%d %H:%M:%S"))
+                        print("-" * 30)
+                        print("Items Purchased:")
+                        for item in items:
+                            print(f"{item['name']:<20} ₱{item['price']:.2f}")
+                        print("-" * 30)
+                        print(f"Total:                   ₱{total_price:.2f}")
+                        print(f"Number of Items:         {len(items):}")
+                        print(f"Payment Method:          {payment_method.capitalize()}")
+                        print("="*30)
+                        print("      Thank you for shopping!     ")
+                        print("="*30)
+                        break
+                    else:
+                        print("Card has no funds. Returning to payment method selection.")
+                else:
+                    print("Incorrect PIN. Returning to payment method selection.")
+
+            else:
+                print("Invalid payment method. Please choose 'Cash' or 'Card'.")
+
+        # Ask if another transaction is needed
+        another_transaction = input("\nWould you like to perform another transaction? (yes/no): ").lower()
+        if another_transaction != 'yes':
+            break  # Exit the loop if no more transactions
+
+    # End of session message
+    print("\n5. Thank you for shopping with us!")
+    print("6. Logging out. Goodbye!")
